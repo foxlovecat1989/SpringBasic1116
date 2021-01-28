@@ -1,10 +1,14 @@
 package jdbc;
 
+import com.mycompany.springbasic1116.jdbc.Emp;
 import java.util.List;
 import java.util.Map;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 public class Test1 {
     ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("jdbc-config.xml");
@@ -19,7 +23,28 @@ public class Test1 {
         // updateAgeById(1, 20);
         // deleteById(3);
         // readAll();
-        readAvgOfAge();
+        // readAvgOfAge();
+        // readAllForEntity();
+        readEntityById(2);
+    }
+    
+    // CRUD - Read 查詢單筆
+    private void readEntityById(Integer eid) {
+        String sql = "Select eid, ename, age, sex, ct From Emp Where eid=?"; 
+        RowMapper<Emp> rm = new BeanPropertyRowMapper<>(Emp.class);
+        //Emp emp = jdbcTemplate.queryForObject(sql, rm, eid);
+        Emp emp = jdbcTemplate.queryForObject(sql, new Object[]{eid}, rm);
+        System.out.println(emp);
+    }
+    
+    // CRUD - Read 查詢2
+    private void readAllForEntity() {
+        String sql = "SELECT eid, ename, age, sex, ct FROM Emp";
+        // RowMapper
+        RowMapper<Emp> rm = new BeanPropertyRowMapper<>(Emp.class); 
+        List<Emp> emps = jdbcTemplate.query(sql, rm);
+        emps.stream()
+                .forEach(System.out::println);
     }
     
     // CRUD - Read 查詢平均年齡
