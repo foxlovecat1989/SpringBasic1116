@@ -12,5 +12,12 @@ public class Test1 {
     public void t1() {
         // 若是有印出資料, 代表配置成功
         System.out.println(jdbcTemplate); 
+        create();
+    }
+    
+    // CRUD - Create 新增資料
+    private void create() {
+        String sql = "Insert Into Emp(ename, age, sex) Values('John', 18, '男')";
+        jdbcTemplate.update(sql);
     }
 }
